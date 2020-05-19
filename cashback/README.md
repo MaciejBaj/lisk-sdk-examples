@@ -6,7 +6,7 @@ Casback application extends the Transfer Transaction of SDK by adding an additio
 
 ## Usage
 
-Install dependencies: 
+Install dependencies:
 
 ```
 npm i --registry https://npm.lisk.io
@@ -21,8 +21,9 @@ node ./src/index | npx bunyan -o short
 Post a custom transaction to `/api/transactions`:
 
 Example:
+
 ```
-{   
+{
     "type":9,
     "id":"13311755314561666527",
     "amount":"100000000000000",

@@ -1,14 +1,24 @@
 {
-  "name": "hello_world",
-  "version": "1.0.0",
-  "description": "Hello World application of Alpha SDK",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "lisk-sdk": "2.1.0-alpha.1"
-  }
+    "name": "lisk-sdk-examples-hello-world",
+    "version": "1.0.0",
+    "description": "Implements a Hello World app with Lisk SDK 3.0",
+    "main": "./src/index.js",
+    "scripts": {
+        "test": "mocha transactions/hello_transaction.test.js"
+    },
+    "author": "Maciej Baj",
+    "license": "ISC",
+    "dependencies": {
+        "lisk-sdk": "3.0.1"
+    },
+    "devDependencies": {
+        "chai": "4.2.0",
+        "mocha": "7.1.2",
+        "prettier": "2.0.5",
+        "sinon": "9.0.2"
+    },
+    "prettier": {
+        "tabWidth": 4,
+        "singleQuote": true
+    }
 }
