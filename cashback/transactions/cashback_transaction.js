@@ -1,46 +1,54 @@
-const {
-	TransferTransaction,
-	BigNum,
-} = require('lisk-sdk');
+const { transactions, BigNum } = require('lisk-sdk');
 
+const TransferTransaction = transactions.TransferTransaction;
 
 class CashbackTransaction extends TransferTransaction {
+    static get TYPE() {
+        return 13;
+    }
 
-	static get TYPE () {
-		return 11;
-	}
+    static get FEE() {
+        return '0';
+    }
 
-	applyAsset(store) {
-		super.applyAsset(store);
+    applyAsset(store) {
+        const transferError = super.applyAsset(store);
 
-		const sender = store.account.get(this.senderId);
-		const updatedSenderBalanceAfterBonus = new BigNum(sender.balance).add(
-			new BigNum(this.amount).div(10)
-		);
-		const updatedSender = {
-			...sender,
-			balance: updatedSenderBalanceAfterBonus.toString(),
-		};
-		store.account.set(sender.address, updatedSender);
+        if (transferError.length) {
+            return transferError;
+        }
 
-		return [];
-	}
+        const sender = store.account.get(this.senderId);
+        const updatedSenderBalanceAfterBonus = new BigNum(sender.balance).add(
+            new BigNum(this.asset.amount).div(10)
+        );
+        const updatedSender = {
+            ...sender,
+            balance: updatedSenderBalanceAfterBonus.toString(),
+        };
+        store.account.set(sender.address, updatedSender);
 
-	undoAsset(store) {
-		super.undoAsset(store);
+        return [];
+    }
 
-		const sender = store.account.get(this.senderId);
-		const updatedSenderBalanceAfterBonus = new BigNum(sender.balance).sub(
-			new BigNum(this.amount).div(10)
-		);
-		const updatedSender = {
-			...sender,
-			balance: updatedSenderBalanceAfterBonus.toString(),
-		};
-		store.account.set(sender.address, updatedSender);
+    undoAsset(store) {
+        const undoTransferError = super.undoAsset(store);
 
-		return [];
-	}
+        if (undoTransferError.length) {
+            return undoTransferError;
+        }
+        const sender = store.account.get(this.senderId);
+        const updatedSenderBalanceAfterBonus = new BigNum(sender.balance).sub(
+            new BigNum(this.asset.amount).div(10)
+        );
+        const updatedSender = {
+            ...sender,
+            balance: updatedSenderBalanceAfterBonus.toString(),
+        };
+        store.account.set(sender.address, updatedSender);
+
+        return [];
+    }
 }
 
-module.exports = CashbackTransaction;
+module.exports = { CashbackTransaction };
